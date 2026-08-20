@@ -1,0 +1,57 @@
+name: VoiceChatDemo
+options:
+  bundleIdPrefix: com.rocs
+  deploymentTarget:
+    iOS: "16.0"
+
+packages:
+  RocsSDK:
+    path: ..
+  WebRTC:
+    url: https://github.com/stasel/WebRTC.git
+    exactVersion: "149.0.0"
+  JitsiMeetSDK:
+    url: https://gitlab-eu.avrioc.io/comera/mobile-apps/ios/conference-sdk-ios-release.git
+    exactVersion: "11.6.4"
+  GiphyUISDK:
+    url: https://github.com/Giphy/giphy-ios-sdk.git
+    exactVersion: "2.2.13"
+  socket.io-client-swift:
+    url: https://github.com/socketio/socket.io-client-swift.git
+    exactVersion: "16.1.0"
+
+targets:
+  VoiceChatDemo:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: Sources
+        excludes:
+          - "RocsDemo/**"
+    dependencies:
+      - package: RocsSDK
+        product: RocsSDK
+      - package: WebRTC
+        product: WebRTC
+      - package: JitsiMeetSDK
+        product: JitsiMeetSDK
+      - package: GiphyUISDK
+        product: GiphyUISDK
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rocs.voicechatdemo
+        SWIFT_VERSION: "5.9"
+        DEVELOPMENT_TEAM: ""
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGNING_REQUIRED: YES
+        CODE_SIGNING_ALLOWED: YES
+    info:
+      path: VoiceChatDemo/Info.plist
+      properties:
+        CFBundleDisplayName: Rocs Chat
+        UILaunchStoryboardName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        NSMicrophoneUsageDescription: "Rocs Chat needs microphone access for voice conversations."
+        NSCameraUsageDescription: "Rocs Chat needs camera access for video conversations."
