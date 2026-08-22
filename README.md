@@ -12,14 +12,14 @@ The legacy product and type names remain available for one compatibility cycle.
 
 ## Installation
 
-### Swift Package Manager (GitLab)
+### Swift Package Manager
 
 Add the package to your `Package.swift`:
 
 ```swift
 dependencies: [
     .package(
-        url: "https://gitlab-eu.avrioc.io/ai/sdk/voxera/ios.git",
+        url: "https://github.com/voxera-voice/voxera-ios.git",
         from: "1.1.42"
     )
 ]
@@ -39,7 +39,7 @@ Then add `VoxeraSDK` to your target dependencies:
 #### Xcode Project
 
 1. **File > Add Package Dependencies...**
-2. Enter: `https://gitlab-eu.avrioc.io/ai/sdk/voxera/ios.git`
+2. Enter: `https://github.com/voxera-voice/voxera-ios.git`
 3. Set version rule to **Up to Next Major** from `1.1.42`
 4. Add `VoxeraSDK` to your target
 
@@ -48,7 +48,7 @@ Then add `VoxeraSDK` to your target dependencies:
 ```yaml
 packages:
   VoxeraSDK:
-    url: https://gitlab-eu.avrioc.io/ai/sdk/voxera/ios.git
+    url: https://github.com/voxera-voice/voxera-ios.git
     from: "1.1.42"
 
 targets:
@@ -76,14 +76,14 @@ Swift Package Manager uses `stasel/WebRTC` 149.0.0 and CocoaPods uses
 
 ### Authentication (Private Repos)
 
-Since the GitLab repo is private, configure credentials:
+If the repository is private, configure credentials:
 
-**Xcode:** Add your GitLab account in **Xcode > Settings > Accounts**.
+**Xcode:** Add your GitHub account in **Xcode > Settings > Accounts**.
 
 **CI / Command-line:** Add to `~/.netrc`:
 
 ```
-machine gitlab-eu.avrioc.io
+machine github.com
 login <your-username>
 password <your-personal-access-token>
 ```

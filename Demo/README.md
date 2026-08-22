@@ -9,9 +9,7 @@ iPhone or iPad application.
 - iOS 16.0+ deployment target
 - Swift 5.9+
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
-- Git access to the private conference SDK repository:
-  - `https://gitlab-eu.avrioc.io/comera/mobile-apps/ios/conference-sdk-ios-release.git`
-- A running Rocs media server
+- A running Voxera media server
 
 ## Setup
 
@@ -36,9 +34,7 @@ Xcode will automatically resolve SPM dependencies:
 |---------|--------|---------|
 | **RocsSDK** | Local (`../`) | — |
 | **WebRTC** | GitHub `stasel/WebRTC` | 149.0.0 |
-| **JitsiMeetSDK** | GitLab `conference-sdk-ios-release` | 11.6.4 |
-| **GiphyUISDK** | GitHub `giphy-ios-sdk` | 2.2.4 |
-| **SocketIO** | GitHub `socket.io-client-swift` | 16.1.0+ |
+| **SocketIO** | GitHub `socket.io-client-swift` (via VoxeraSDK) | 16.1.0+ |
 
 ### 3. Configure server URL
 

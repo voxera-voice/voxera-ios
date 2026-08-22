@@ -1,59 +1,32 @@
 {
-  "pins" : [
+  "pins": [
     {
-      "identity" : "conference-sdk-ios-release",
-      "kind" : "remoteSourceControl",
-      "location" : "https://gitlab-eu.avrioc.io/comera/mobile-apps/ios/conference-sdk-ios-release.git",
-      "state" : {
-        "revision" : "6ad5b898857f48c11cf96273499a2df05b73e351",
-        "version" : "11.6.4"
+      "identity": "socket.io-client-swift",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/socketio/socket.io-client-swift.git",
+      "state": {
+        "revision": "175da8b5156f6b132436f0676cc84c2f6a766b6e",
+        "version": "16.1.0"
       }
     },
     {
-      "identity" : "giphy-ios-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Giphy/giphy-ios-sdk.git",
-      "state" : {
-        "revision" : "b3275304a96a65199f591f71abc7eda54a844c38",
-        "version" : "2.2.13"
+      "identity": "starscream",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/daltoniam/Starscream",
+      "state": {
+        "revision": "ac6c0fc9da221873e01bd1a0d4818498a71eef33",
+        "version": "4.0.6"
       }
     },
     {
-      "identity" : "libwebp-xcode",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/libwebp-Xcode",
-      "state" : {
-        "revision" : "0d60654eeefd5d7d2bef3835804892c40225e8b2",
-        "version" : "1.5.0"
-      }
-    },
-    {
-      "identity" : "socket.io-client-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/socketio/socket.io-client-swift.git",
-      "state" : {
-        "revision" : "175da8b5156f6b132436f0676cc84c2f6a766b6e",
-        "version" : "16.1.0"
-      }
-    },
-    {
-      "identity" : "starscream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream",
-      "state" : {
-        "revision" : "ac6c0fc9da221873e01bd1a0d4818498a71eef33",
-        "version" : "4.0.6"
-      }
-    },
-    {
-      "identity" : "webrtc",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stasel/WebRTC.git",
-      "state" : {
-        "revision" : "ff4647dc67f00d037c199c69e1a1ee8ceda88236",
-        "version" : "149.0.0"
+      "identity": "webrtc",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/stasel/WebRTC.git",
+      "state": {
+        "revision": "ff4647dc67f00d037c199c69e1a1ee8ceda88236",
+        "version": "149.0.0"
       }
     }
   ],
-  "version" : 2
+  "version": 2
 }

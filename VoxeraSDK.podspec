@@ -6,11 +6,11 @@ Pod::Spec.new do |spec|
     VoxeraSDK connects an iOS application to Voxera using Socket.IO,
     mediasoup, and a single shared WebRTC runtime.
   DESC
-  spec.homepage = "https://gitlab-eu.avrioc.io/ai/sdk/voxera/ios"
+  spec.homepage = "https://github.com/voxera-voice/voxera-ios"
   spec.license = { :type => "Commercial", :text => "Copyright Avrioc Technologies. All rights reserved." }
   spec.author = { "Voxera" => "support@voxera.ai" }
   spec.source = {
-    :git => "https://gitlab-eu.avrioc.io/ai/sdk/voxera/ios.git",
+    :git => "https://github.com/voxera-voice/voxera-ios.git",
     :tag => spec.version.to_s
   }
 

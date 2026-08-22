@@ -3,27 +3,25 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3267BD53E012FD5B2545F910 /* GiphyUISDK in Frameworks */ = {isa = PBXBuildFile; productRef = F396D85BDAD56D451BBE34C2 /* GiphyUISDK */; };
 		705D822737A65B835E22A7C2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E84CAD872B183FA080503F9 /* Config.swift */; };
 		9532F7F5F3EAAD4767228B16 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = CF5C46F9D380BDB5AC6768C2 /* WebRTC */; };
 		96159FDF637439068B101676 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAB3DA33E07F37D991F6001 /* ChatViewModel.swift */; };
 		96E44C46CADD45C21D3DB414 /* RocsSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0A8904B39A7B5A9A8954A837 /* RocsSDK */; };
-		C58FC7AF15452D91AD7FED73 /* JitsiMeetSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 0A27E3048CCA4A5502734E9E /* JitsiMeetSDK */; };
 		C991794B402DB7574D25BC24 /* VoiceChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437D907781860392201F06A9 /* VoiceChatApp.swift */; };
 		F2F0AA6A524F016DEB21DE3E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 620101900D2C3FB3CF6AF491 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2820D64210EC34C90D0695F3 /* sdk-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "sdk-ios"; path = ..; sourceTree = SOURCE_ROOT; };
+		29401CD128BBD5C7C839E275 /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ios; path = ..; sourceTree = SOURCE_ROOT; };
 		2E84CAD872B183FA080503F9 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		3EAB3DA33E07F37D991F6001 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		437D907781860392201F06A9 /* VoiceChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceChatApp.swift; sourceTree = "<group>"; };
 		620101900D2C3FB3CF6AF491 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		849DF0CF133F6B9DFC244402 /* VoiceChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		849DF0CF133F6B9DFC244402 /* VoiceChatDemo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = VoiceChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,8 +31,6 @@
 			files = (
 				96E44C46CADD45C21D3DB414 /* RocsSDK in Frameworks */,
 				9532F7F5F3EAAD4767228B16 /* WebRTC in Frameworks */,
-				C58FC7AF15452D91AD7FED73 /* JitsiMeetSDK in Frameworks */,
-				3267BD53E012FD5B2545F910 /* GiphyUISDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +48,7 @@
 		91A6195ABA816E0CF1EDA066 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				2820D64210EC34C90D0695F3 /* sdk-ios */,
+				29401CD128BBD5C7C839E275 /* ios */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -95,8 +91,6 @@
 			packageProductDependencies = (
 				0A8904B39A7B5A9A8954A837 /* RocsSDK */,
 				CF5C46F9D380BDB5AC6768C2 /* WebRTC */,
-				0A27E3048CCA4A5502734E9E /* JitsiMeetSDK */,
-				F396D85BDAD56D451BBE34C2 /* GiphyUISDK */,
 			);
 			productName = VoiceChatDemo;
 			productReference = 849DF0CF133F6B9DFC244402 /* VoiceChatDemo.app */;
@@ -112,6 +106,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					21B1E0B57C5C904270609DE5 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -127,12 +122,10 @@
 			mainGroup = A2E824C1C1EB8185BF9A68A0;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				71E7D321284DAE69506FB015 /* XCRemoteSwiftPackageReference "giphy-ios-sdk" */,
-				0AA6943A91A0934DCFCD85DF /* XCRemoteSwiftPackageReference "conference-sdk-ios-release" */,
-				F5277B600DE9BDCFA4B42AD1 /* XCRemoteSwiftPackageReference "WebRTC" */,
-				885979A2DCB2DA9646B31DA4 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */,
+				24A35E4FFA9F58D3533EB2E9 /* XCRemoteSwiftPackageReference "WebRTC" */,
 				CD28950F466ACB320511B12B /* XCLocalSwiftPackageReference ".." */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -283,7 +276,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 57Y7YJK973;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = VoiceChatDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -305,7 +298,7 @@
 				CODE_SIGNING_REQUIRED = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 57Y7YJK973;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = VoiceChatDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -350,31 +343,7 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0AA6943A91A0934DCFCD85DF /* XCRemoteSwiftPackageReference "conference-sdk-ios-release" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://gitlab-eu.avrioc.io/comera/mobile-apps/ios/conference-sdk-ios-release.git";
-			requirement = {
-				kind = exactVersion;
-				version = 11.6.4;
-			};
-		};
-		71E7D321284DAE69506FB015 /* XCRemoteSwiftPackageReference "giphy-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Giphy/giphy-ios-sdk.git";
-			requirement = {
-				kind = exactVersion;
-				version = 2.2.13;
-			};
-		};
-		885979A2DCB2DA9646B31DA4 /* XCRemoteSwiftPackageReference "socket.io-client-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/socketio/socket.io-client-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 16.1.0;
-			};
-		};
-		F5277B600DE9BDCFA4B42AD1 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+		24A35E4FFA9F58D3533EB2E9 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/stasel/WebRTC.git";
 			requirement = {
@@ -385,24 +354,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		0A27E3048CCA4A5502734E9E /* JitsiMeetSDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0AA6943A91A0934DCFCD85DF /* XCRemoteSwiftPackageReference "conference-sdk-ios-release" */;
-			productName = JitsiMeetSDK;
-		};
 		0A8904B39A7B5A9A8954A837 /* RocsSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RocsSDK;
 		};
 		CF5C46F9D380BDB5AC6768C2 /* WebRTC */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F5277B600DE9BDCFA4B42AD1 /* XCRemoteSwiftPackageReference "WebRTC" */;
+			package = 24A35E4FFA9F58D3533EB2E9 /* XCRemoteSwiftPackageReference "WebRTC" */;
 			productName = WebRTC;
-		};
-		F396D85BDAD56D451BBE34C2 /* GiphyUISDK */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 71E7D321284DAE69506FB015 /* XCRemoteSwiftPackageReference "giphy-ios-sdk" */;
-			productName = GiphyUISDK;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,6 +1,6 @@
 # RocsSDK iOS - Build, Publish & Deployment Guide
 
-Complete guide for building, publishing to Nexus SPM registry, and using the RocsSDK iOS package.
+Complete guide for building, publishing, and using the VoxeraSDK iOS package.
 
 ---
 
@@ -8,8 +8,6 @@ Complete guide for building, publishing to Nexus SPM registry, and using the Roc
 
 - [Prerequisites](#prerequisites)
 - [Building the SDK](#building-the-sdk)
-- [Publishing to Nexus SPM](#publishing-to-nexus-spm)
-- [Installing from Nexus](#installing-from-nexus)
 - [Usage Guide](#usage-guide)
 - [Troubleshooting](#troubleshooting)
 
@@ -17,36 +15,27 @@ Complete guide for building, publishing to Nexus SPM registry, and using the Roc
 
 ## Quick Start
 
-### For Publishers (Deploy to Nexus)
+### For Publishers
+
+Swift Package Manager consumes packages straight from git, so publishing is
+tagging — no registry, no credentials:
 
 ```bash
-# 1. Publish WebRTC
-cd webrtc-ios-release
-export NEXUS_URL="https://nexus.example.com"
-export NEXUS_REPO="swift-hosted"
-export NEXUS_USER="username"
-export NEXUS_PASS="password"
-./publish-to-nexus.sh 1.0.0
-
-# 2. Update sdk-ios/Package.swift
-cd ../sdk-ios
-# Replace .package(path: "../webrtc-ios-release") with Nexus URL
-# See "Publishing to Nexus SPM → Step 2" for details
-
-# 3. Publish sdk-ios
-./scripts/publish-to-nexus.sh
+./scripts/build.sh --clean     # verify it builds
+git tag 1.1.43
+git push origin 1.1.43
 ```
 
-### For Users (Install from Nexus)
+### For Users
 
 **Package.swift:**
 ```swift
 dependencies: [
-    .package(url: "https://nexus.example.com/repository/swift-hosted/RocsSDK", from: "1.0.0")
+    .package(url: "https://github.com/voxera-voice/voxera-ios.git", from: "1.1.43")
 ]
 ```
 
-That's it! WebRTC is included automatically. Users can optionally override with their own WebRTC.
+That's it — WebRTC resolves automatically from `github.com/stasel/WebRTC`.
 
 ---
 
@@ -58,11 +47,6 @@ That's it! WebRTC is included automatically. Users can optionally override with 
 - Git 2.30+
 - Swift Package Manager (included with Xcode)
 
-### Nexus Repository Manager
-- Nexus 3.x with Swift Package Manager plugin
-- Repository configured for Swift packages
-- Valid Nexus credentials with publish permissions
-
 ### Dependencies & Peer Dependency Pattern
 
 The SDK uses a **peer dependency pattern** for WebRTC:
@@ -73,17 +57,17 @@ The SDK uses a **peer dependency pattern** for WebRTC:
 
 **How Peer Dependencies Work:**
 
-1. **sdk-ios** references WebRTC from Nexus (default fallback)
+1. **sdk-ios** references WebRTC from `github.com/stasel/WebRTC` (default)
 2. **Consuming app** CAN declare their own WebRTC package (same product name "WebRTC")
 3. **Swift PM resolution:** If consumer provides WebRTC, it takes precedence over sdk-ios's reference
-4. **Result:** RocsSDK uses consumer's WebRTC if provided, otherwise uses Nexus default
+4. **Result:** the SDK uses the consumer's WebRTC if provided, otherwise the default
 
 **Consumer Can Override (Optional):**
 
 ```swift
 // Package.swift - User's own WebRTC takes precedence
 dependencies: [
-    .package(url: "https://nexus.../RocsSDK", from: "1.0.0"),
+    .package(url: "https://github.com/voxera-voice/voxera-ios.git", from: "1.1.43"),
     .package(url: "https://github.com/my-org/custom-webrtc.git", from: "2.0.0")  // ← Overrides sdk-ios's WebRTC
 ]
 ```
@@ -146,520 +130,6 @@ git push origin v1.2.3
 
 ---
 
-## Publishing to Nexus SPM
-
-### ⚠️ IMPORTANT: Publish Order
-
-**You MUST publish WebRTC before sdk-ios:**
-
-1. ✅ **First:** Publish `webrtc-ios-release` to Nexus
-2. ✅ **Second:** Update `sdk-ios/Package.swift` with WebRTC Nexus URL  
-3. ✅ **Third:** Publish `sdk-ios` to Nexus
-
-### Step 1: Publish WebRTC to Nexus
-
-```bash
-cd /path/to/packages/webrtc-ios-release
-
-# Set environment variables
-export NEXUS_URL="https://your-nexus-server.com"
-export NEXUS_REPO="swift-hosted"
-export NEXUS_USER="your-username"
-export NEXUS_PASS="your-password"
-
-# Publish WebRTC (specify version or use git tag)
-./publish-to-nexus.sh 1.0.0
-
-# Output:
-# ✅ Successfully published WebRTC 1.0.0 to Nexus
-#    URL: https://your-nexus-server.com/repository/swift-hosted/WebRTC/1.0.0/WebRTC-1.0.0.zip
-```
-
-### Step 2: Update sdk-ios Package.swift
-
-After publishing WebRTC, update `sdk-ios/Package.swift` to reference WebRTC from Nexus instead of path:
-
-**Find this line (around line 25):**
-```swift
-.package(path: "../webrtc-ios-release")
-```
-
-**Replace with:**
-```swift
-.package(
-    url: "https://your-nexus-server.com/repository/swift-hosted/WebRTC",
-    from: "1.0.0"
-)
-```
-
-Also update the package name references in targets (around line 33 and 41):
-```swift
-// Change from:
-.product(name: "WebRTC", package: "webrtc-ios-release")
-
-// To:
-.product(name: "WebRTC", package: "WebRTC")
-```
-
-**Full updated dependencies section:**
-```swift
-dependencies: [
-    .package(
-        url: "https://github.com/socketio/socket.io-client-swift.git",
-        from: "16.1.0"
-    ),
-    .package(
-        url: "https://your-nexus-server.com/repository/swift-hosted/WebRTC",
-        from: "1.0.0"
-    )
-]
-```
-
-Commit the change:
-```bash
-cd /path/to/packages/sdk-ios
-git add Package.swift
-git commit -m "Configure WebRTC Nexus URL for publishing"
-git tag -a 1.0.0 -m "Release 1.0.0"
-git push origin main 1.0.0
-```
-
-> **Note:** This change is only needed for Nexus publishing. For local development, you can keep the path dependency.
-
-### Step 3: Publish sdk-ios to Nexus
-
-### Prerequisites for Nexus Publishing
-
-1. **Nexus Repository Setup**
-   - Create a hosted repository for Swift packages
-   - Repository type: `swift` (requires Nexus Swift Plugin)
-   - Repository name: e.g., `swift-hosted`
-
-2. **Authentication**
-   - Nexus username and password/token
-   - Or use deployment token
-
-### Option 1: Manual Upload to Nexus
-
-#### Step 1: Create Archive
-
-```bash
-cd /path/to/packages/sdk-ios
-
-# Create a clean archive
-git archive --format=zip --prefix=RocsSDK-1.0.0/ HEAD > RocsSDK-1.0.0.zip
-
-# Or create tar.gz
-git archive --format=tar.gz --prefix=RocsSDK-1.0.0/ HEAD > RocsSDK-1.0.0.tar.gz
-```
-
-#### Step 2: Upload to Nexus via Web UI
-
-1. Login to Nexus: `https://your-nexus-server.com`
-2. Navigate to Browse → Repositories → `swift-hosted`
-3. Click "Upload Component"
-4. Select "Swift Package" as format
-5. Upload the archive
-6. Fill in metadata:
-   - **Name:** RocsSDK
-   - **Version:** 1.0.0
-   - **Repository URL:** (your git URL)
-
-#### Step 3: Upload via curl (Alternative)
-
-```bash
-NEXUS_URL="https://your-nexus-server.com"
-NEXUS_REPO="swift-hosted"
-NEXUS_USER="your-username"
-NEXUS_PASS="your-password"
-VERSION="1.0.0"
-
-curl -u "$NEXUS_USER:$NEXUS_PASS" \
-  --upload-file "RocsSDK-${VERSION}.zip" \
-  "${NEXUS_URL}/repository/${NEXUS_REPO}/RocsSDK/${VERSION}/RocsSDK-${VERSION}.zip"
-```
-
-### Option 2: Automated Publishing Script
-
-Create a publish script `scripts/publish-to-nexus.sh`:
-
-```bash
-#!/bin/bash
-set -e
-
-# Configuration
-NEXUS_URL="${NEXUS_URL:-https://your-nexus-server.com}"
-NEXUS_REPO="${NEXUS_REPO:-swift-hosted}"
-NEXUS_USER="${NEXUS_USER}"
-NEXUS_PASS="${NEXUS_PASS}"
-
-# Get version from git tag
-VERSION=$(git describe --tags --abbrev=0)
-VERSION=${VERSION#v}  # Remove 'v' prefix if exists
-
-if [ -z "$VERSION" ]; then
-  echo "Error: No git tag found. Please tag the release first."
-  echo "  git tag -a 1.0.0 -m 'Release 1.0.0'"
-  echo "  git push origin 1.0.0"
-  exit 1
-fi
-
-echo "📦 Publishing RocsSDK version $VERSION to Nexus..."
-
-# Create archive
-ARCHIVE_NAME="RocsSDK-${VERSION}.zip"
-git archive --format=zip --prefix="RocsSDK-${VERSION}/" HEAD > "$ARCHIVE_NAME"
-
-echo "✅ Created archive: $ARCHIVE_NAME"
-
-# Upload to Nexus
-UPLOAD_URL="${NEXUS_URL}/repository/${NEXUS_REPO}/RocsSDK/${VERSION}/${ARCHIVE_NAME}"
-
-curl -f -u "${NEXUS_USER}:${NEXUS_PASS}" \
-  --upload-file "$ARCHIVE_NAME" \
-  "$UPLOAD_URL"
-
-if [ $? -eq 0 ]; then
-  echo "✅ Successfully published RocsSDK $VERSION to Nexus"
-  echo "   URL: $UPLOAD_URL"
-else
-  echo "❌ Failed to publish to Nexus"
-  exit 1
-fi
-
-# Cleanup
-rm "$ARCHIVE_NAME"
-echo "🧹 Cleaned up temporary archive"
-```
-
-Make it executable and run:
-
-```bash
-chmod +x scripts/publish-to-nexus.sh
-
-# Set environment variables
-export NEXUS_URL="https://your-nexus-server.com"
-export NEXUS_REPO="swift-hosted"
-export NEXUS_USER="your-username"
-export NEXUS_PASS="your-password"
-
-# Publish
-./scripts/publish-to-nexus.sh
-```
-
-### Option 3: Docker Build & Publish
-
-Use Docker to publish:
-
-```bash
-# Build and publish using Docker
-docker build \
-  --build-arg REPOSITORY="https://your-nexus-server.com/repository/swift-hosted" \
-  --build-arg USERNAME="your-username" \
-  --build-arg PASSWORD="your-password" \
-  --build-arg VERSION="1.0.0" \
-  -t sdk-ios-publisher:1.0.0 \
-  -f Dockerfile \
-  .
-
-# Docker automatically publishes during build
-```
-
-**Using with environment variables:**
-
-```bash
-# Load credentials from environment
-export NEXUS_URL="https://your-nexus-server.com"
-export NEXUS_REPO="swift-hosted"
-export NEXUS_USER="your-username"
-export NEXUS_PASS="your-password"
-export VERSION="1.0.0"
-
-docker build \
-  --build-arg REPOSITORY="${NEXUS_URL}/repository/${NEXUS_REPO}" \
-  --build-arg USERNAME="${NEXUS_USER}" \
-  --build-arg PASSWORD="${NEXUS_PASS}" \
-  --build-arg VERSION="${VERSION}" \
-  -t sdk-ios-publisher:${VERSION} \
-  .
-```
-
-**Cleanup after publishing:**
-
-```bash
-docker rmi sdk-ios-publisher:1.0.0
-```
-
-### Option 4: CI/CD Pipeline (GitHub Actions)
-
-Create `.github/workflows/publish-nexus.yml`:
-
-```yaml
-name: Publish to Nexus SPM
-
-on:
-  push:
-    tags:
-      - 'v*.*.*'
-      - '*.*.*'
-
-jobs:
-  publish:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Get version from tag
-        id: version
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          VERSION=${VERSION#v}
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Create archive
-        run: |
-          git archive --format=zip \
-            --prefix="RocsSDK-${{ steps.version.outputs.VERSION }}/" \
-            HEAD > "RocsSDK-${{ steps.version.outputs.VERSION }}.zip"
-
-      - name: Upload to Nexus
-        env:
-          NEXUS_URL: ${{ secrets.NEXUS_URL }}
-          NEXUS_REPO: ${{ secrets.NEXUS_REPO }}
-          NEXUS_USER: ${{ secrets.NEXUS_USER }}
-          NEXUS_PASS: ${{ secrets.NEXUS_PASS }}
-          VERSION: ${{ steps.version.outputs.VERSION }}
-        run: |
-          curl -f -u "${NEXUS_USER}:${NEXUS_PASS}" \
-            --upload-file "RocsSDK-${VERSION}.zip" \
-            "${NEXUS_URL}/repository/${NEXUS_REPO}/RocsSDK/${VERSION}/RocsSDK-${VERSION}.zip"
-```
-
-Add secrets to GitHub repository:
-- `NEXUS_URL`: Your Nexus server URL
-- `NEXUS_REPO`: Repository name (e.g., `swift-hosted`)
-- `NEXUS_USER`: Nexus username
-- `NEXUS_PASS`: Nexus password or token
-
-### Option 5: GitLab CI/CD Pipeline
-
-A `.gitlab-ci.yml` is included for GitLab CI/CD.
-
-**Prerequisites:**
-1. GitLab repository with CI/CD enabled
-2. GitLab CI/CD variables configured
-3. Git tag created for the version
-
-**Setup GitLab CI/CD Variables:**
-
-Navigate to: Project Settings → CI/CD → Variables
-
-Add these variables:
-- `NEXUS_URL` → `https://your-nexus-server.com` (masked)
-- `NEXUS_USER` → Your Nexus username (masked)
-- `NEXUS_PASS` → Your Nexus password (masked, protected)
-
-**Trigger Publishing:**
-```bash
-# Tag the release
-git tag -a 1.0.0 -m "Release 1.0.0"
-git push origin 1.0.0
-
-# GitLab automatically triggers pipeline on tag push
-```
-
-**View Pipeline:**
-- Navigate to: CI/CD → Pipelines
-- Click on latest pipeline for your tag
-- View jobs: validate:version, build:docker, publish:nexus
-
-**Pipeline Stages:**
-1. **Validate** - Checks tag exists, extracts version
-2. **Build** - Builds Docker image with Nexus credentials
-3. **Publish** - Uploads package to Nexus
-4. **Notify** - Success/failure notification
-
-### Option 6: Jenkins Pipeline
-
-A `Jenkinsfile` is also included for Jenkins CI/CD.
-
-**Prerequisites:**
-1. Jenkins credentials configured with ID: `nexus-credentials`
-2. Environment variable `NEXUS_URL` set in Jenkins
-3. Git tag created for the version
-
-**Setup Jenkins Job:**
-1. Create new Pipeline job
-2. Configure SCM to track the repository
-3. Set Pipeline script from SCM → use `sdk-ios/Jenkinsfile`
-4. Configure credentials: `nexus-credentials` → Username/Password
-5. Add environment variable: `NEXUS_URL` → Your Nexus server URL
-
-**Trigger Publishing:**
-```bash
-# Tag the release
-git tag -a 1.0.0 -m "Release 1.0.0"
-git push origin 1.0.0
-
-# Jenkins automatically builds and publishes
-```
-
-**Manual Trigger:**
-- Build job in Jenkins
-- Pipeline reads version from latest git tag
-- Publishes using Docker build
-
----
-
-## Installing from Nexus
-
-### Prerequisites
-
-1. **Configure Nexus Mirror (if using private registry)**
-
-Create or edit `~/.netrc`:
-
-```bash
-machine your-nexus-server.com
-login your-username
-password your-password
-```
-
-Or use `.swift-package-manager/configuration/mirrors.json`:
-
-```json
-{
-  "object": {
-    "mirrors": [
-      {
-        "mirror": "https://your-nexus-server.com/repository/swift-proxy/",
-        "original": "https://github.com"
-      }
-    ]
-  }
-}
-```
-
-### Option 1: Swift Package Manager (Package.swift)
-
-**Basic Installation (Uses default WebRTC from Nexus):**
-
-```swift
-// swift-tools-version: 5.9
-import PackageDescription
-
-let package = Package(
-    name: "YourApp",
-    platforms: [
-        .iOS(.v16)
-    ],
-    dependencies: [
-        // RocsSDK from Nexus (includes WebRTC dependency automatically)
-        .package(
-            url: "https://your-nexus-server.com/repository/swift-hosted/RocsSDK",
-            from: "1.0.0"
-        )
-    ],
-    targets: [
-        .target(
-            name: "YourApp",
-            dependencies: [
-                .product(name: "RocsSDK", package: "RocsSDK")
-            ]
-        )
-    ]
-)
-```
-
-**Advanced: Override with Your Own WebRTC (Optional):**
-
-If you want to use a different WebRTC version/source:
-
-```swift
-dependencies: [
-    // RocsSDK from Nexus
-    .package(
-        url: "https://your-nexus-server.com/repository/swift-hosted/RocsSDK",
-        from: "1.0.0"
-    ),
-    // Your custom WebRTC (same product name "WebRTC" will override sdk-ios's WebRTC)
-    .package(
-        url: "https://github.com/your-org/custom-webrtc.git",
-        from: "2.0.0"
-    )
-],
-targets: [
-    .target(
-        name: "YourApp",
-        dependencies: [
-            .product(name: "RocsSDK", package: "RocsSDK"),
-            .product(name: "WebRTC", package: "custom-webrtc")  // Your WebRTC takes precedence
-        ]
-    )
-]
-```
-
-SPM will use your WebRTC instead of the one referenced by sdk-ios.
-
-### Option 2: Xcode Project (GUI)
-
-**Basic Installation:**
-1. File → Add Package Dependencies
-2. Enter Package URL: `https://your-nexus-server.com/repository/swift-hosted/RocsSDK`
-3. Select version: "Up to Next Major" from `1.0.0`
-4. Click "Add Package"
-5. Select "RocsSDK" product
-
-**To Override WebRTC (Optional):**
-Repeat steps 1-5 with your custom WebRTC URL before adding RocsSDK. Xcode will use your WebRTC.
-
-### Option 3: XcodeGen (project.yml)
-
-**Basic Installation (Uses default WebRTC from Nexus):**
-
-```yaml
-packages:
-  RocsSDK:
-    url: https://your-nexus-server.com/repository/swift-hosted/RocsSDK
-    from: "1.0.0"
-
-targets:
-  YourApp:
-    dependencies:
-      - package: RocsSDK
-        product: RocsSDK
-```
-
-**Advanced: Override with Your Own WebRTC (Optional):**
-
-```yaml
-packages:
-  RocsSDK:
-    url: https://your-nexus-server.com/repository/swift-hosted/RocsSDK
-    from: "1.0.0"
-  MyWebRTC:
-    url: https://github.com/your-org/custom-webrtc.git
-    from: "2.0.0"
-
-targets:
-  YourApp:
-    dependencies:
-      - package: RocsSDK
-        product: RocsSDK
-      - package: MyWebRTC
-        product: WebRTC  # ← Same product name "WebRTC" overrides sdk-ios's WebRTC
-```
-
-Generate Xcode project:
-
-```bash
-xcodegen generate
-```
-
----
-
 ## Usage Guide
 
 ### 1. Add Required Permissions
@@ -702,7 +172,7 @@ struct VoiceChatView: View {
     init() {
         let config = RocsConfig(
             appKey: "your-app-key-from-dashboard",
-            serverUrl: "wss://media.rocs-voice.com",
+            serverUrl: "wss://media.example.com",
             userId: "user-123",
             threadId: "thread-456"  // Created in dashboard
         )
@@ -808,7 +278,7 @@ class VoiceCallViewController: UIViewController {
         // Configure
         var config = RocsConfig(
             appKey: "your-app-key",
-            serverUrl: "wss://media.rocs-voice.com",
+            serverUrl: "wss://media.example.com",
             userId: "user-123",
             threadId: "thread-456"
         )
@@ -910,7 +380,7 @@ extension VoiceCallViewController: RocsClientDelegate {
 ```swift
 var config = RocsConfig(
     appKey: "your-app-key",
-    serverUrl: "wss://media.rocs-voice.com",
+    serverUrl: "wss://media.example.com",
     userId: "user-123",
     threadId: "thread-456"
 )
@@ -1061,23 +531,6 @@ This is expected - sdk-ios is iOS-only and doesn't support macOS host platform. 
 xcodebuild build -scheme RocsSDK -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
-### Nexus Publishing Issues
-
-**Issue: "401 Unauthorized"**
-
-Check credentials:
-```bash
-# Test Nexus authentication
-curl -u "username:password" https://your-nexus-server.com/service/rest/v1/status
-```
-
-**Issue: "404 Not Found"**
-
-Verify repository exists:
-1. Login to Nexus web UI
-2. Check repository name matches `NEXUS_REPO` variable
-3. Ensure Swift plugin is installed
-
 ### Runtime Issues
 
 **Issue: "Microphone access denied"**
@@ -1092,7 +545,7 @@ Add to `Info.plist`:
 
 Check server URL and network:
 ```swift
-config.serverUrl = "wss://media.rocs-voice.com"  // Must be wss://
+config.serverUrl = "wss://media.example.com"  // Must be wss://
 ```
 
 **Issue: "No audio output"**
@@ -1114,7 +567,4 @@ client.setAudioOutput(.speaker)
 
 ## Support
 
-- **Documentation:** https://docs.rocs-voice.com
-- **Dashboard:** https://app.rocs-voice.com
-- **Email:** support@rocs-voice.com
-- **GitHub Issues:** https://github.com/rocs-voice/rocs-ios/issues
+- **GitHub Issues:** https://github.com/voxera-voice/voxera-ios/issues

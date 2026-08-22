@@ -3,7 +3,6 @@
 
 import SwiftUI
 import RocsSDK
-import JitsiMeetSDK
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // MARK: - Voice options (static)

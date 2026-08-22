@@ -4,7 +4,6 @@
 
 - [Installation](#installation)
   - [Local Package (Development)](#local-package-development)
-  - [Nexus Registry (Production)](#nexus-registry-production)
 - [Using a Custom WebRTC Package](#using-a-custom-webrtc-package)
 - [Socket Events Reference](#socket-events-reference)
   - [Client → Server (Emitted)](#client--server-emitted)
