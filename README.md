@@ -116,7 +116,7 @@ import VoxeraSDK
 struct VoiceChatView: View {
     @StateObject private var vm = VoxeraViewModel(config: VoxeraConfig(
         appKey: "your-app-key",
-        serverUrl: "wss://media.voxera.ai",
+        serverUrl: "https://rtc.voxera-voice.com",
         userId: "user-123",
         threadId: "thread-456"
     ))
@@ -128,7 +128,7 @@ struct VoiceChatView: View {
             Text("Speaking: \(vm.speakingStatus.rawValue)")
 
             // Messages
-            ForEach(vm.messages) { msg in
+            ForEach(vm.conversationMessages) { msg in
                 Text("\(msg.role.rawValue): \(msg.content)")
             }
 
@@ -157,7 +157,7 @@ class ChatViewController: UIViewController, VoxeraClientDelegate {
         super.viewDidLoad()
         client = VoxeraClient(config: VoxeraConfig(
             appKey: "your-app-key",
-            serverUrl: "wss://media.voxera.ai",
+            serverUrl: "https://rtc.voxera-voice.com",
             userId: "user-123",
             threadId: "thread-456"
         ))
@@ -244,7 +244,7 @@ This sends:
 ```swift
 let config = VoxeraConfig(
     appKey: "your-app-key",                          // Required — from the Voxera dashboard
-    serverUrl: "wss://media.voxera.ai",              // Required — media server URL
+    serverUrl: "https://rtc.voxera-voice.com",              // Required — media server URL
     userId: "user-123",                              // Optional
     threadId: "thread-456",                          // Optional               // Optional
     username: "Alice",                               // Optional — tells the AI who is speaking
