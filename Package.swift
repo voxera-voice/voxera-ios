@@ -4,8 +4,18 @@ import PackageDescription
 let package = Package(
     name: "VoxeraSDK",
     platforms: [
-        .iOS(.v15),
-        .macOS(.v13)
+        // iOS only. This used to also claim .macOS(.v13), which was never
+        // true: the WebRTC dependency ships no usable macOS slice, so a macOS
+        // build fails on "'WebRTC/RTCAudioSource.h' file not found".
+        //
+        // Removing it does NOT change that failure -- SPM still builds for the
+        // host, so a bare `swift build` on a Mac fails exactly as before. What
+        // it fixes is the manifest advertising a platform the package cannot
+        // support, which is what made the failure look like a broken package
+        // rather than the wrong build target. Build for iOS:
+        //
+        //   xcodebuild -scheme VoxeraSDK -destination 'generic/platform=iOS Simulator' build
+        .iOS(.v15)
     ],
     products: [
         .library(

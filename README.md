@@ -1,4 +1,4 @@
-# Voxera SDK — iOS / macOS
+# Voxera SDK — iOS
 
 Swift SDK for the Voxera Voice Platform. New integrations should import
 `VoxeraSDK` and use `VoxeraClient`, `VoxeraConfig`, and `VoxeraViewModel`.
@@ -6,8 +6,15 @@ The legacy product and type names remain available for one compatibility cycle.
 
 ## Requirements
 
-- iOS 15.0+ / macOS 13.0+
+- iOS 15.0+
 - Xcode 15+
+
+> **Build for iOS, not the host.** `swift build` targets macOS by default and
+> fails on the WebRTC module — the dependency has no usable macOS slice. Use:
+>
+> ```bash
+> xcodebuild -scheme VoxeraSDK -destination 'generic/platform=iOS Simulator' build
+> ```
 - Swift 5.9+
 
 ## Installation
