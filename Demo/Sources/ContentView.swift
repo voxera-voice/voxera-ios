@@ -79,7 +79,7 @@ struct ContentView: View {
     @State private var textInput      = ""
     @State private var bookmarkLabel  = ""
     @State private var askAiPrompt    = ""
-    @State private var lastJustinActionJson  = ""
+    @State private var lastToolCallJson  = ""
     @State private var lastSelectActionsJson = ""
     @FocusState private var inputFocused: Bool
 
@@ -660,9 +660,9 @@ struct ContentView: View {
                 .foregroundStyle(Color(hex: "#94a3b8"))
                 .tracking(0.5)
 
-            // ── justin_action JSON ──
+            // ── tool call JSON ──
             VStack(alignment: .leading, spacing: 4) {
-                Text("justin_action payload:")
+                Text("tool call payload:")
                     .font(.system(size: 11, weight: .semibold))
                     .foregroundStyle(Color(hex: "#f59e0b"))
                 ScrollView {
@@ -684,7 +684,7 @@ struct ContentView: View {
                         .flatMap { String(data: $0, encoding: .utf8) } ?? "{}"
                     let payload: [String: Any] = [
                         "message": tool.function.arguments,
-                        "event": "justin_action_output",
+                        "event": "tool-output",
                         "action_id": tool.id
                     ]
                     lastSelectActionsJson = selectActionToJson(payload)
@@ -739,7 +739,7 @@ struct ContentView: View {
         guard let tool = tools.first else { return "{}" }
         let parsedArgs: Any = tool.function.arguments
         let payload: [String: Any] = [
-            "type": "justin_action",
+            "type": "tool-triggered",
             "content": [
                 "action_id": tool.id,
                 "name": tool.function.name,

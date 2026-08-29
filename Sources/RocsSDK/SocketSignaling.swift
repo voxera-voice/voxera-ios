@@ -55,29 +55,10 @@ final class SocketSignaling {
     var onMinutesGenerated: (([String: Any]) -> Void)?
     var onBookmarkAdded: (([String: Any]) -> Void)?
     var onBookmarkRemoved: (([String: Any]) -> Void)?
-    /// The assistant called a tool. Named `onJustinAction` until the wire
-    /// event `justin_action` gained its canonical name `tool-triggered`.
+    /// The assistant called a tool.
     var onToolTriggered: (([String: Any]) -> Void)?
-    /// Ids already delivered, so the canonical event and its legacy alias do
-    /// not both reach the client for one call. Ordered, so the oldest goes
-    /// first once the window is full.
-    private var seenToolActionIds: [String] = []
-    private let seenToolActionLimit = 256
     var onSearching: (([String: Any]) -> Void)?
     var onClearAction: (([String], String) -> Void)?
-
-    /// True the first time an action id is seen. Empty ids are always allowed
-    /// through: without one there is nothing to match on, and dropping them
-    /// would silently lose real tool calls.
-    private func isNewToolAction(_ id: String) -> Bool {
-        guard !id.isEmpty else { return true }
-        if seenToolActionIds.contains(id) { return false }
-        seenToolActionIds.append(id)
-        if seenToolActionIds.count > seenToolActionLimit {
-            seenToolActionIds.removeFirst(seenToolActionIds.count - seenToolActionLimit)
-        }
-        return true
-    }
 
     /// The underlying Socket.IO client ID (used for host-changed comparison).
     var socketId: String? { socket?.sid }
@@ -431,19 +412,10 @@ final class SocketSignaling {
             self?.onBookmarkRemoved?(d)
         }
 
-        // Tool calls / actions. The server sends both the canonical name and
-        // the legacy alias so that clients built before the rename keep
-        // working, which means this SDK sees every call twice and has to drop
-        // the second copy — a duplicate would be answered with a second tool
-        // output for an action the server has already had an answer for.
-        for toolEvent in ["tool-triggered", "justin_action"] {
-            socket.on(toolEvent) { [weak self] data, _ in
-                guard let self, let d = data.first as? [String: Any] else { return }
-                let content = d["content"] as? [String: Any]
-                let actionId = content?["action_id"] as? String ?? ""
-                guard self.isNewToolAction(actionId) else { return }
-                self.onToolTriggered?(d)
-            }
+        // Tool calls
+        socket.on("tool-triggered") { [weak self] data, _ in
+            guard let d = data.first as? [String: Any] else { return }
+            self?.onToolTriggered?(d)
         }
         socket.on("searching") { [weak self] data, _ in
             guard let d = data.first as? [String: Any] else { return }
