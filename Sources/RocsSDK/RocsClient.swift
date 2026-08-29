@@ -1055,7 +1055,7 @@ public final class RocsClient {
         }
 
         // Tool calls / actions
-        sig.onJustinAction = { [weak self] data in
+        sig.onToolTriggered = { [weak self] data in
             guard let self else { return }
             if let content = data["content"] as? [String: Any] {
                 let actionId = content["action_id"] as? String ?? ""
