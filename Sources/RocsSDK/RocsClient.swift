@@ -208,9 +208,11 @@ public final class RocsClient {
         guard isConversationActive else { return }
         
         Task {
+            // `event` is echoed for older servers only; the current gateway
+            // reads just `action_id` and `message`.
             _ = await emit("select-actions", data: [
                 "message": message,
-                "event": "justin_action_output",
+                "event": "tool-output",
                 "action_id": actionId
             ])
         }

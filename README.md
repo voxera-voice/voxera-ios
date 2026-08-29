@@ -189,11 +189,16 @@ class ChatViewController: UIViewController, VoxeraClientDelegate {
 }
 ```
 
-## Justin Action Integration
+## Tool Call Integration
 
-Use this flow when the server emits a `justin_action` and you need to send back a tool output.
+Use this flow when the assistant calls a tool and you need to send back its output.
 
-### 1) Receive `justin_action`
+The server emits the call under the canonical name `tool-triggered` and, for
+clients built before the rename, also under the legacy alias `justin_action`.
+The SDK subscribes to both and delivers each call once, so nothing extra is
+needed here.
+
+### 1) Receive the tool call
 
 Implement the delegate callback:
 
@@ -210,13 +215,13 @@ Server payload shape:
 
 ```json
 {
-    "type": "justin_action",
+    "type": "tool-triggered",
     "content": {
         "action_id": "YJ8hC9qHC",
         "name": "schedule_message",
         "arguments": {
             "schedule_message": {
-                "message": "Hi Ayman, are the justin actions works?",
+                "message": "Hi Ayman, is the appointment confirmed?",
                 "recipient": { "name": "ayman" },
                 "schedule": { "time": "2026-04-17T14:00:00" }
             }
@@ -241,7 +246,7 @@ This sends:
 ```json
 {
     "message": "message was scheduled to ayman",
-    "event": "justin_action_output",
+    "event": "tool-output",
     "action_id": "YJ8hC9qHC"
 }
 ```
@@ -274,7 +279,7 @@ let config = VoxeraConfig(
 |--------|-------------|
 | `startConversation()` | Start a voice conversation |
 | `endConversation()` | End the current conversation |
-| `selectAction(message:actionId:)` | Send tool output for a received `justin_action` |
+| `selectAction(message:actionId:)` | Send tool output for a received tool call |
 
 #### Media Controls
 | Method | Description |
