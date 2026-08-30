@@ -259,8 +259,20 @@ let config = VoxeraConfig(
     threadId: "thread-456",                          // Optional               // Optional
     username: "Alice",                               // Optional — tells the AI who is speaking
     userInfo: ["plan": "pro", "locale": "en-US"],    // Optional — extra context added to system prompt
+    language: Locale.current.language.languageCode?.identifier, // Optional — "ar", "fr-CA", … or "auto"
 )
 ```
+
+### Language
+
+The agent answers in whatever language the caller speaks, and follows them if
+they switch mid-call. Nothing to configure.
+
+Set `language` when you already know it — on iOS the device locale usually is
+that answer. A tag makes speech-to-text more accurate and slightly faster,
+because it no longer has to work the language out from the first moment of
+audio. `"auto"` asks for detection explicitly, which is also how you override
+an agent that was pinned to the wrong language.
 
 ## API Reference
 

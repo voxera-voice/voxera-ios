@@ -122,6 +122,14 @@ public struct RocsConfig {
     public var username: String?
     /// Additional context/metadata about the user — appended to the AI system prompt.
     public var userInfo: [String: String]?
+    /// Conversation language: a BCP-47 tag such as `"ar"`, `"ar-EG"` or
+    /// `"fr-CA"`, or `"auto"` to detect it from the caller's speech and reply
+    /// in the same language.
+    ///
+    /// `Locale.current.language.languageCode?.identifier` is usually the right
+    /// value for an app that follows the device. Leaving this nil keeps
+    /// whatever the published agent was configured with.
+    public var language: String?
 
     // Callbacks
     public var onConnectionStatusChange: ((ConnectionStatus) -> Void)?
@@ -161,6 +169,7 @@ public struct RocsConfig {
         workspaceId: String? = nil,
         username: String? = nil,
         userInfo: [String: String]? = nil,
+        language: String? = nil,
         videoConfig: VideoConfig? = nil,
         connectionOptions: ConnectionOptions = ConnectionOptions(),
         configurationId: String? = nil,
@@ -191,6 +200,7 @@ public struct RocsConfig {
         self.workspaceId = workspaceId
         self.username = username
         self.userInfo = userInfo
+        self.language = language
         self.videoConfig = videoConfig
         self.connectionOptions = connectionOptions
         self.configurationId = configurationId

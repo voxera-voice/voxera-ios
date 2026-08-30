@@ -1196,6 +1196,7 @@ public final class RocsClient {
         if let un  = config.username          { payload["username"] = un }
         if let ui  = config.userInfo          { payload["userInfo"] = ui }
         if let md  = config.metadata, !md.isEmpty { payload["metadata"] = md }
+        if let lang = config.language, !lang.isEmpty { payload["language"] = lang }
         let iso8601 = ISO8601DateFormatter()
         iso8601.formatOptions = [.withInternetDateTime, .withTimeZone]
         iso8601.timeZone = TimeZone.current
