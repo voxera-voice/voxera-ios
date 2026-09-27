@@ -205,7 +205,8 @@ func client(_ client: VoxeraClient, didReceiveToolCalls tools: [ToolCall], messa
         guard let action = tools.first else { return }
         print("action_id: \(action.id)")
         print("name: \(action.function.name)")
-        print("arguments: \(action.function.arguments)") // JSON string
+        let args = action.function.arguments // [String: Any], already parsed
+        print("arguments: \(args)")
 }
 ```
 
