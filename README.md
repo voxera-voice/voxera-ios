@@ -27,7 +27,7 @@ Add the package to your `Package.swift`:
 dependencies: [
     .package(
         url: "https://github.com/voxera-voice/voxera-ios.git",
-        from: "1.1.42"
+        from: "1.1.43"
     )
 ]
 ```
@@ -47,7 +47,7 @@ Then add `VoxeraSDK` to your target dependencies:
 
 1. **File > Add Package Dependencies...**
 2. Enter: `https://github.com/voxera-voice/voxera-ios.git`
-3. Set version rule to **Up to Next Major** from `1.1.42`
+3. Set version rule to **Up to Next Major** from `1.1.43`
 4. Add `VoxeraSDK` to your target
 
 #### XcodeGen (`project.yml`)
@@ -56,7 +56,7 @@ Then add `VoxeraSDK` to your target dependencies:
 packages:
   VoxeraSDK:
     url: https://github.com/voxera-voice/voxera-ios.git
-    from: "1.1.42"
+    from: "1.1.43"
 
 targets:
   YourApp:
@@ -71,7 +71,7 @@ targets:
 source "https://cdn.cocoapods.org/"
 
 target "YourApp" do
-  pod "VoxeraSDK", "1.1.42"
+  pod "VoxeraSDK", "1.1.43"
 end
 ```
 

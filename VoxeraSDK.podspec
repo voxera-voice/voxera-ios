@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = "VoxeraSDK"
-  spec.version = "1.1.42"
+  spec.version = "1.1.43"
   spec.summary = "Native iOS client for the Voxera realtime voice and video platform."
   spec.description = <<-DESC
     VoxeraSDK connects an iOS application to Voxera using Socket.IO,
