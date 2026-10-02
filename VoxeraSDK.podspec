@@ -7,8 +7,8 @@ Pod::Spec.new do |spec|
     mediasoup, and a single shared WebRTC runtime.
   DESC
   spec.homepage = "https://github.com/voxera-voice/voxera-ios"
-  spec.license = { :type => "Commercial", :text => "Copyright Voxera. All rights reserved." }
-  spec.author = { "Voxera" => "support@voxera.ai" }
+  spec.license = { :type => "MIT", :file => "LICENSE" }
+  spec.author = { "Voxera" => "voicevoxera@gmail.com" }
   spec.source = {
     :git => "https://github.com/voxera-voice/voxera-ios.git",
     :tag => spec.version.to_s
